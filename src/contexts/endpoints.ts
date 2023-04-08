@@ -1,0 +1,1 @@
+export const FARMER_ENDPOINT = "/farmers"
