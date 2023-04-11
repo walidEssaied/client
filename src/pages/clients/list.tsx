@@ -1,15 +1,22 @@
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 import {
   DateField,
   EditButton,
-  List,
   ShowButton,
   useDataGrid
 } from "@refinedev/mui";
-import React from "react";
+import { List } from "pages/in-stock/components/List";
+import React, { useState } from "react";
+import { ClientCreate } from "./create";
 
 export const ClientList = () => {
   const { dataGridProps } = useDataGrid();
+  const [open, setOpen] = useState<boolean>(false)
+  const onClose = () => {
+    setOpen(false);
+  }
+
 
   const columns = React.useMemo<GridColumns<any>>(
     () => [
@@ -63,7 +70,15 @@ export const ClientList = () => {
   );
 
   return (
-    <List>
+    <List open={open} setOpen={setOpen}>
+      <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
+        <DialogTitle>
+          Create Client
+        </DialogTitle>
+        <DialogContent>
+          <ClientCreate onClose={onClose} />
+        </DialogContent>
+      </Dialog>
       <DataGrid {...dataGridProps} columns={columns} autoHeight />
     </List>
   );

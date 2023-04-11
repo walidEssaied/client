@@ -199,18 +199,19 @@
 import { Box, FormControl, FormLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
 import { Create } from "@refinedev/mui";
 import { useForm } from "@refinedev/react-hook-form";
-import { useQuery } from "react-query";
+import { FC } from "react";
+import { useMutation, useQuery } from "react-query";
 import { getFarmers } from "services/farmer";
+import { CreateIn } from "services/in";
 
-export const InStockCreate = () => {
+export const InStockCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
   const {
     saveButtonProps,
     refineCore: { formLoading },
     register,
-    control,
     formState: { errors },
     watch,
-    setValue
+    handleSubmit
   } = useForm();
 
 
@@ -226,148 +227,64 @@ export const InStockCreate = () => {
   console.log({ data });
 
   const selectedFarmer: any = (!isError && !isLoading && data) && (data || []).filter((item: any) => item.id === formValues.farmer)[0]
-  console.log({ selectedFarmer })
   const products: [] = selectedFarmer !== undefined ? selectedFarmer?.attributes?.produits.data : []
-  console.log({ products });
+
+  const createOutMutation = useMutation((data) => CreateIn(data), {
+    onSuccess: (data) => {
+      if (onClose) {
+        onClose();
+      }
+    }
+  });
+
+  const onSubmit = handleSubmit((data: any) => {
+    createOutMutation.mutate(data);
+  });
 
   return (
     <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
-      <Box
-        component="form"
-        sx={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px" }}
-        autoComplete="off"
-      >
-        <TextField
-          {...register("description", {
-            required: "This field is required",
-          })}
-          error={!!(errors as any)?.description}
-          helperText={(errors as any)?.description?.message}
-          margin="normal"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          type="text"
-          label="Description"
-          name="description"
-        />
-        <TextField
-          {...register("containers", {
-            required: "This field is required",
-            valueAsNumber: true,
-          })}
-          error={!!(errors as any)?.containers}
-          helperText={(errors as any)?.containers?.message}
-          margin="normal"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          type="number"
-          label="Containers"
-          name="containers"
-        />
-        <TextField
-          {...register("prix_achat", {
-            required: "This field is required",
-            valueAsNumber: true,
-          })}
-          error={!!(errors as any)?.prix_achat}
-          helperText={(errors as any)?.prix_achat?.message}
-          margin="normal"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          type="number"
-          label="Prix Achat"
-          name="prix_achat"
-        />
-        <TextField
-          {...register("prix_vente", {
-            required: "This field is required",
-            valueAsNumber: true,
-          })}
-          error={!!(errors as any)?.prix_vente}
-          helperText={(errors as any)?.prix_vente?.message}
-          margin="normal"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          type="number"
-          label="Prix Vente"
-          name="prix_vente"
-        />
-        <TextField
-          {...register("qte_vendu", {
-            required: "This field is required",
-            valueAsNumber: true,
-          })}
-          error={!!(errors as any)?.qte_vendu}
-          helperText={(errors as any)?.qte_vendu?.message}
-          margin="normal"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          type="number"
-          label="Qte Vendu"
-          name="qte_vendu"
-        />
-        <TextField
-          {...register("qte_restant", {
-            required: "This field is required",
-            valueAsNumber: true,
-          })}
-          error={!!(errors as any)?.qte_restant}
-          helperText={(errors as any)?.qte_restant?.message}
-          margin="normal"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          type="number"
-          value={Number(formValues.qte_total)}
-          label="Qte Restant"
-          // disabled
-          name="qte_total"
-        />
-
-        <TextField
-          {...register("qte_total", {
-            required: "This field is required",
-            valueAsNumber: true,
-            onChange: (e) => {
-              setValue("qte_restant", Number(e.target.value));
-            }
-          })}
-          error={!!(errors as any)?.qte_total}
-          helperText={(errors as any)?.qte_total?.message}
-          margin="normal"
-          fullWidth
-          InputLabelProps={{ shrink: true }}
-          type="number"
-          label="Qte Total"
-          name="qte_total"
-        />
-
-      </Box>
-      <Stack>
-        <FormControl>
-          <FormLabel>Farmer</FormLabel>
-          <Select label="Farmer" {...register("farmer")}>
-            {isLoading && (
-              <MenuItem value="">Loading farmers...</MenuItem>
-            )}
-            {isError && (
-              <MenuItem value="">Error while getting farmers...</MenuItem>
-            )}
-            {(data || []).map((item: any, index: number) => (
-              <MenuItem value={item.id} key={index}>{item.attributes.name}</MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        {(selectedFarmer && products) && (
+      <form id="create-out-order" onSubmit={onSubmit}>
+        <Stack>
+          <TextField
+            {...register("containers", {
+              required: "This field is required",
+              valueAsNumber: true,
+            })}
+            error={!!(errors as any)?.containers}
+            helperText={(errors as any)?.containers?.message}
+            margin="normal"
+            fullWidth
+            InputLabelProps={{ shrink: true }}
+            type="number"
+            label="Containers"
+            name="containers"
+          />
           <FormControl>
-            <FormLabel>Product related</FormLabel>
-            <Select label="Product related" {...register("produit")}>
-              {(products || []).map((item: any, index: number) => (
+            <FormLabel>Farmer</FormLabel>
+            <Select label="Farmer" {...register("farmer")}>
+              {isLoading && (
+                <MenuItem value="">Loading farmers...</MenuItem>
+              )}
+              {isError && (
+                <MenuItem value="">Error while getting farmers...</MenuItem>
+              )}
+              {(data || []).map((item: any, index: number) => (
                 <MenuItem value={item.id} key={index}>{item.attributes.name}</MenuItem>
               ))}
             </Select>
           </FormControl>
-        )}
-      </Stack>
+          {(selectedFarmer && products) && (
+            <FormControl>
+              <FormLabel>Product related</FormLabel>
+              <Select label="Product related" {...register("produit")}>
+                {(products || []).map((item: any, index: number) => (
+                  <MenuItem value={item.id} key={index}>{item.attributes.name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          )}
+        </Stack>
+      </form>
     </Create>
   );
 };

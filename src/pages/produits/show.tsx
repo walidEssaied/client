@@ -31,6 +31,10 @@ export const ProduitShow = () => {
     </Typography>
     <TextField value={record?.name} />
     <Typography variant="body1" fontWeight="bold">
+     Tag
+    </Typography>
+    <TextField value={record?.tag} />
+    <Typography variant="body1" fontWeight="bold">
      Price
     </Typography>
     <NumberField value={record?.price ?? ""} />

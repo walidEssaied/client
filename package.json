@@ -23,7 +23,8 @@
     "react-hook-form": "^7.30.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.8.1",
-    "react-scripts": "^5.0.0"
+    "react-scripts": "^5.0.0",
+    "react-to-print": "^2.14.12"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^5.16.4",

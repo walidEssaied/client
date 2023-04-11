@@ -15,34 +15,27 @@
 //   );
 // };
 
-import { DeleteOutline, Done } from "@mui/icons-material";
-import { Box, Button, FormControl, FormLabel, IconButton, MenuItem, Select, Stack, TextField, Typography } from "@mui/material";
+import { FormControl, FormLabel, MenuItem, Select, Stack, TextField } from "@mui/material";
+import { Create } from "@refinedev/mui";
 import { useForm } from "@refinedev/react-hook-form";
-import { useFieldArray } from "react-hook-form";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { FC, useEffect } from "react";
+import { useQuery } from "react-query";
 import { getClients } from "services/client";
-import { getIns, updateIn } from "services/in";
-import { CreateOut } from "services/out";
-import { Create } from "./components/CreatePage";
+import { getFarmers } from "services/farmer";
 
-export const OutStockCreate = () => {
-
-
-  const navigate = useNavigate();
-  const queryClient = useQueryClient();
+export const OutStockCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
   const {
+    saveButtonProps,
     refineCore: { formLoading },
     register,
-    control,
     formState: { errors },
     watch,
-    handleSubmit
+    setValue,
   } = useForm();
 
   const { data, isLoading, isError } = useQuery({
-    queryFn: getIns(),
-    queryKey: "ins",
+    queryFn: getFarmers(),
+    queryKey: "farmers",
     enabled: true,
     refetchOnWindowFocus: false,
   })
@@ -55,82 +48,106 @@ export const OutStockCreate = () => {
   })
 
   const formValues = watch();
+
+  const selectedFarmer: any = (!isError && !isLoading && data) && (data || []).filter((item: any) => item.id === formValues.farmer)[0]
+  const products: [] = selectedFarmer !== undefined ? selectedFarmer?.attributes?.produits.data : []
+
+  const prix = formValues.prix;
+  const poids = formValues.poids;
+  const produit = formValues.produitData;
+
   console.log({ formValues });
-  // console.log({ data });
 
-  const { fields, append, remove } = useFieldArray(
-    {
-      control,
-      name: "in"
+  useEffect(() => {
+    const t = prix * poids;
+    setValue("total", t)
+    // if (produit) {
+    //   setValue("produit", produit.id);
+    //   setValue("product_name", produit.attributes.name);
+    // }
+    console.log({ produit });
+    if (produit) {
+      setValue("produit", produit.id);
+      setValue("product_name", produit.attributes.name);
+      setValue("product_id", produit.id);
+      setValue("tag", produit.attributes.tag);
+      console.log(produit.id)
+      console.log(produit.attributes.name)
     }
-  )
-
-
-
-  const updateProductByIdMutation = useMutation((data: any) => updateIn(data), {
-    onSuccess: (response) => {
-      alert("Product updated successfully");
-      console.log({ response });
-      queryClient.refetchQueries("ins")
-    },
-    onError: (error) => {
-      console.log(error)
-    },
-  });
-  var productsUpdates: Array<any> = [];
-  const updateProductById = (data: any) => {
-    console.log({ dataProduct: data });
-    const productName = data.attributes.produit.data.attributes.name;
-    const product = formValues.in.filter((item: any) => item.attributes.produit.data.attributes.name === productName)[0];
-    const qteVendu: number = product.qte_vendu;
-    const oldQteVendu: number = product.attributes.qte_vendu;
-    const newQteVendu: number = Number(qteVendu) + Number(oldQteVendu);
-    const newQteRestant: number = Number(product.attributes.qte_restant) - Number(qteVendu);
-    console.log({ newQteRestant });
-    console.log({ newQteVendu });
-    const procedToUpdate = product.attributes.qte_total === Number(newQteRestant) + Number(newQteVendu);
-    if (procedToUpdate) {
-
-      const updatedQteVenduAndRestant = {
-        itemId: data.id,
-        id: product.id,
-        attributes: {
-          qte_vendu: newQteVendu,
-          qte_restant: newQteRestant
-        }
-      }
-      console.log({ updatedQteVenduAndRestant });
-      updateProductByIdMutation.mutate(updatedQteVenduAndRestant)
-      // remove(data.id)
-    } else {
-      alert("Please verify your stcok");
-    }
-  }
-
-  const createOutMutation = useMutation((data) => CreateOut(data), {
-    onSuccess: (data) => {
-      navigate("/outs");
-      // console.log({ data });
-    }
-  });
-
-  const onSubmit = handleSubmit((data) => {
-    const products = data.in.map((item: any) => {
-      return ({ product: item.attributes.produit.data.attributes.name, farmer: item.attributes.farmer.data.attributes.name, quantityVendu: item.qte_vendu, prix: Number(item.attributes.prix_vente) * Number(item.qte_vendu) })
-    });
-    const d: any = { ...data, ins: data.in.map((item: any) => item.id), details: products };
-    createOutMutation.mutate(d);
-  });
+  }, [prix, poids, produit])
 
 
   return (
-    <Create isLoading={formLoading}>
-      <form id="create-out-order" onSubmit={onSubmit}>
-        <Box
-          component="form"
-          sx={{ display: "flex", flexDirection: "column" }}
-          autoComplete="off"
-        >
+    <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
+      <Stack direction="row" alignItems="start" columnGap={2}>
+
+        {/* <FormControl sx={{ mt: -1, width: 200 }}>
+          <FormLabel>Client</FormLabel>
+          <Select label="Client" {...register("client")}>
+            {isLoadingClient && (
+              <MenuItem value="">Loading client...</MenuItem>
+            )}
+            {isErrorClient && (
+              <MenuItem value="">Error while getting client...</MenuItem>
+            )}
+            {(dataClient || []).map((item: any, index: number) => (
+              <MenuItem value={item.id} key={index}>{item.attributes.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl> */}
+
+        <FormControl sx={{ mt: -1, width: 100 }}>
+          <FormLabel sx={{ mb: -2 }}>Client</FormLabel>
+          <TextField
+            {...register("client", {
+              required: "This field is required",
+              onChange: (e) => {
+                const t: number = Number(formValues.poids) * Number(formValues.client);
+                console.log({ t });
+                setValue("total", t)
+              }
+            })}
+            error={!!(errors as any)?.client}
+            helperText={(errors as any)?.client?.message}
+            margin="normal"
+            sx={{
+              width: 100
+            }}
+            InputLabelProps={{ shrink: true }}
+            type="text"
+            name="client"
+          />
+        </FormControl>
+
+        <FormControl sx={{ mt: -1, width: 200 }}>
+          <FormLabel>Farmer</FormLabel>
+          <Select label="Farmer" {...register("farmer")}>
+            {isLoading && (
+              <MenuItem value="">Loading in orders...</MenuItem>
+            )}
+            {isError && (
+              <MenuItem value="">Error while getting in orders...</MenuItem>
+            )}
+            {(data || []).map((item: any, index: number) => (
+              // <MenuItem value={item.id} key={index}>{item.in?.data.attributes.containers}</MenuItem>
+              <MenuItem value={item.id} key={index}>{item.attributes.name}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+
+        {(selectedFarmer && products) && (
+          <FormControl sx={{ mt: -1 }}>
+            <FormLabel>Products</FormLabel>
+            <Select label="Product related" {...register("produitData")}>
+              {(products || []).map((item: any, index: number) => (
+                <MenuItem value={item} key={index}>{item.attributes.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
+
+        <FormControl sx={{ mt: -1, width: 100 }}>
+          <FormLabel sx={{ mb: -2 }}>Containers</FormLabel>
           <TextField
             {...register("containers", {
               required: "This field is required",
@@ -139,201 +156,86 @@ export const OutStockCreate = () => {
             error={!!(errors as any)?.containers}
             helperText={(errors as any)?.containers?.message}
             margin="normal"
-            fullWidth
+            // fullWidth
+            sx={{
+              width: 100
+            }}
             InputLabelProps={{ shrink: true }}
             type="number"
-            label="Containers"
             name="containers"
           />
+        </FormControl>
 
+        <FormControl sx={{ mt: -1, width: 100 }}>
+          <FormLabel sx={{ mb: -2 }}>Poids</FormLabel>
           <TextField
-            {...register("description", {
+            {...register("poids", {
               required: "This field is required",
+              valueAsNumber: true,
             })}
-            error={!!(errors as any)?.description}
-            helperText={(errors as any)?.description?.message}
+            error={!!(errors as any)?.poids}
+            helperText={(errors as any)?.poids?.message}
             margin="normal"
-            fullWidth
+            // fullWidth
+            sx={{
+              width: 100
+            }}
             InputLabelProps={{ shrink: true }}
-            type="text"
-            label="Description"
-            name="description"
+            type="number"
+            name="poids"
           />
+        </FormControl>
 
+        <FormControl sx={{ mt: -1, width: 100 }}>
+          <FormLabel sx={{ mb: -2 }}>Prix</FormLabel>
+          <TextField
+            {...register("prix", {
+              required: "This field is required",
+              valueAsNumber: true,
+              onChange: (e) => {
+                const t: number = Number(formValues.poids) * Number(formValues.prix);
+                console.log({ t });
+                setValue("total", t)
+              }
+            })}
+            defaultValue={0}
+            error={!!(errors as any)?.prix}
+            helperText={(errors as any)?.prix?.message}
+            margin="normal"
+            // fullWidth
+            sx={{
+              width: 100
+            }}
+            InputLabelProps={{ shrink: true }}
+            type="number"
+            name="prix"
+          />
+        </FormControl>
 
-        </Box>
-        <Stack>
-          <FormControl>
-            <FormLabel>Client</FormLabel>
-            <Select label="Client" {...register("client")}>
-              {isLoadingClient && (
-                <MenuItem value="">Loading client...</MenuItem>
-              )}
-              {isErrorClient && (
-                <MenuItem value="">Error while getting client...</MenuItem>
-              )}
-              {(dataClient || []).map((item: any, index: number) => (
-                <MenuItem value={item.id} key={index}>{item.attributes.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl>
-            <FormLabel>In orders</FormLabel>
-            <Select label="In orders" onChange={(e) => {
-              append(e.target.value);
-            }
-            }>
-              {isLoading && (
-                <MenuItem value="">Loading in orders...</MenuItem>
-              )}
-              {isError && (
-                <MenuItem value="">Error while getting in orders...</MenuItem>
-              )}
-              {(data || []).map((item: any, index: number) => (
-                <MenuItem value={item} key={index}>{item.attributes.produit.data.attributes.name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <Button onClick={() => navigate("/clients/create")}>Add Client</Button>
-          <Stack direction="row" spacing={5} mt={2}>
-            <Stack mt={1} p={1} bgcolor="" spacing={2} width="60%" alignItems="start">
-              {fields.map((item: any, index) => {
-                console.log({ item })
-                // if ([...productUpdated].includes(item.id)) {
-                //   return "Item updated";
-                // }
-                return (
-                  <Stack key={index} direction="row" justifyContent="space-between" width="100%" spacing={2} p={2} border={1} alignItems="center">
-                    {
-                      productsUpdates.includes(item.id) ? "Item updated" : (
-                        <>
-                          <Stack direction="row" spacing={2} alignItems="center">
-                            <Typography sx={{ width: "50%" }}>
-                              <b>Produit</b> {item.attributes.produit.data.attributes.name}
-                            </Typography>
-                            <Typography sx={{ width: "50%" }}>
-                              <b>Farmer</b> {item.attributes.farmer.data.attributes.name}
-                            </Typography>
-                            <Typography sx={{ width: "50%" }}>
-                              <b>Prix vente</b> {item.attributes.prix_vente} (DT)
-                            </Typography>
-                            <Typography sx={{ width: "50%" }}>
-                              <b>Quantity restant</b> {item.attributes.qte_restant} (KG)
-                            </Typography>
-                            <TextField sx={{ width: "50%" }}
-                              {...register(`in.${index}.qte_vendu`, {
-                                required: "This field is required",
-                                valueAsNumber: true,
-                              })}
-                              error={Number(formValues.in[index].qte_vendu) > Number(item.attributes.qte_restant)}
-                              helperText={(errors as any)?.qte_vendu?.message || Number(formValues.in[index].qte_vendu) > Number(item.attributes.qte_restant) ? "Verify quantity, quantity must be in stock" : ""}
-                              margin="normal"
-                              // fullWidth
-                              InputLabelProps={{ shrink: true }}
-                              type="number"
-                              label="Quantity to sell"
-                              defaultValue={0}
-                              name={`in.${index}.qte_vendu`}
-                            />
+        <FormControl sx={{ mt: -1, width: 100 }}>
+          <FormLabel sx={{ mb: -2 }}>Total</FormLabel>
+          <TextField
+            {...register("total", {
+              required: "This field is required",
+              valueAsNumber: true,
+            })}
+            error={!!(errors as any)?.total}
+            helperText={(errors as any)?.total?.message}
+            margin="normal"
+            // fullWidth
+            sx={{
+              width: 100
+            }}
+            InputLabelProps={{ shrink: true }}
+            type="number"
+            name="total"
+          />
+        </FormControl>
 
-                            {/* <TextField sx={{ width: "50%" }}
-                    {...register(`${index}.prix_total`, {
-                      required: "This field is required",
-                      valueAsNumber: true,
-                    })}
-                    error={Number(formValues.in[index].prix_total) > Number(item.attributes.qte_restant)}
-                    helperText={(errors as any)?.prix_total?.message}
-                    margin="normal"
-                    // fullWidth
-                    InputLabelProps={{ shrink: true }}
-                    type="number"
-                    label="Prix Total"
-                    name="prix_total"
-                  /> */}
-                          </Stack>
-                          <Stack direction="row" spacing={2}>
-                            <Typography sx={{ width: "50%" }}>
-                              <b>Total</b> {(Number(item.attributes.prix_vente) * Number(item.qte_vendu)) ? Number(item.attributes.prix_vente) * Number(item.qte_vendu) : "Processing"} (DT)
-                            </Typography>
-                            <Box>
-                              <IconButton>
-                                <Done onClick={() => { updateProductById(item) }} sx={{ color: "green", mr: 5 }} />
-                              </IconButton>
-                            </Box>
-                            <DeleteOutline onClick={() => { remove(item.id) }} sx={{ color: "red" }} />
-                          </Stack></>
-                      )
-                    }
+      </Stack>
 
-                  </Stack>
-                )
-              })}
-            </Stack>
-            <Stack width="40%">
-              <TextField
-                {...register("poids", {
-                  required: "This field is required",
-                  valueAsNumber: true,
-                })}
-                error={!!(errors as any)?.poids}
-                helperText={(errors as any)?.poids?.message}
-                margin="normal"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                type="number"
-                label="Poids"
-                name="poids"
-              />
-              <TextField
-                {...register("amount_paid", {
-                  required: "This field is required",
-                  valueAsNumber: true,
-                })}
-                error={!!(errors as any)?.amount_paid}
-                helperText={(errors as any)?.amount_paid?.message}
-                margin="normal"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                type="number"
-                label="Amount Paid"
-                name="amount_paid"
-              />
-              <TextField
-                {...register("amount_remaining", {
-                  required: "This field is required",
-                  valueAsNumber: true,
-                })}
-                error={!!(errors as any)?.amount_remaining}
-                helperText={(errors as any)?.amount_remaining?.message}
-                margin="normal"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                type="number"
-                label="Amount Remaining"
-                name="amount_remaining"
-              />
-              <TextField
-                {...register("prix_total", {
-                  required: "This field is required",
-                  valueAsNumber: true,
-                })}
-                error={!!(errors as any)?.prix_total}
-                helperText={(errors as any)?.prix_total?.message}
-                margin="normal"
-                fullWidth
-                InputLabelProps={{ shrink: true }}
-                type="number"
-                label="Prix Total"
-                name="prix_total"
-              />
-            </Stack>
-
-          </Stack>
-        </Stack>
-
-        <Button type="submit">Save</Button>
-        <Button>Cancel</Button>
-      </form>
+      {/* <Button type="submit">Save</Button> */}
+      {/* <Button onClick={onClose}>Cancel</Button> */}
     </Create >
   );
 };

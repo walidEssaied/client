@@ -20,8 +20,7 @@ import { useShow } from "@refinedev/core";
 import {
   DateField,
   NumberField,
-  Show,
-  TextFieldComponent as TextField,
+  Show
 } from "@refinedev/mui";
 
 export const OutStockShow = () => {
@@ -57,21 +56,9 @@ export const OutStockShow = () => {
         </Typography>
         <DateField value={record?.createdAt} />
         <Typography variant="body1" fontWeight="bold">
-          Description
-        </Typography>
-        <TextField value={record?.description} />
-        <Typography variant="body1" fontWeight="bold">
-          Amount Paid
-        </Typography>
-        <NumberField value={record?.amount_paid ?? ""} />
-        <Typography variant="body1" fontWeight="bold">
-          Amount Remaining
-        </Typography>
-        <NumberField value={record?.amount_remaining ?? ""} />
-        <Typography variant="body1" fontWeight="bold">
           Prix Total
         </Typography>
-        <NumberField value={record?.prix_total ?? ""} />
+        <NumberField value={record?.total ?? ""} />
         <Typography variant="body1" fontWeight="bold">
           Client
         </Typography>
@@ -80,10 +67,19 @@ export const OutStockShow = () => {
         </Typography>
       </Stack>
       <Stack mt={2} spacing={2}>
-        <Typography variant="body1" fontWeight="bold">
-          Orders contenu
+      <Typography variant="body1" fontWeight="bold">
+          Farmer
         </Typography>
-        {record && record!.details.map((item: any) => (
+        <Typography variant="body1">
+          {record?.farmer.name}
+        </Typography>
+        <Typography variant="body1" fontWeight="bold">
+          Product
+        </Typography>
+        <Typography variant="body1">
+          {record?.produit.name}
+        </Typography>
+        {/* {record && record!.details.map((item: any) => (
           <Stack p={2} direction="row" spacing={2} border={1} bgcolor="white">
             <Typography>
               <b>Product</b>
@@ -102,7 +98,7 @@ export const OutStockShow = () => {
               {" "} {item.prix}
             </Typography>
           </Stack>
-        ))}
+        ))} */}
       </Stack>
     </Show>
   );

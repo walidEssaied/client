@@ -51,6 +51,19 @@ export const ProduitCreate = () => {
           label="Name"
           name="name"
         />
+        <TextField
+          {...register("tag", {
+            required: "This field is required",
+          })}
+          error={!!(errors as any)?.tag}
+          helperText={(errors as any)?.tag?.message}
+          margin="normal"
+          fullWidth
+          InputLabelProps={{ shrink: true }}
+          type="text"
+          label="Tag"
+          name="tag"
+        />
         <FormControl>
           <FormLabel>Farmer</FormLabel>
           <Select label="Farmer" {...register("farmer")}>
