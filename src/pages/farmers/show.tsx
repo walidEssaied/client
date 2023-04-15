@@ -23,7 +23,7 @@ import {
   TextFieldComponent as TextField,
 } from "@refinedev/mui";
 import { useState } from "react";
-import { ComponentToPrintContainer } from "./components/Exemple";
+import { ComponentToPrintContainer } from "./components/Print";
 
 export const FarmerShow = () => {
   const [product, setProduct] = useState<string | null>(null);
