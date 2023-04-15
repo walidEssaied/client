@@ -72,7 +72,7 @@ export const OutStockList = () => {
                 headerAlign: "left",
                 align: "left",
                 flex: 1,
-                valueGetter: params => params.row.farmer.name
+                valueGetter: params => params.row.farmer?.name
             },
             {
                 field: "product_name",

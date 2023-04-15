@@ -1,15 +1,22 @@
+import { Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { DataGrid, GridColumns } from "@mui/x-data-grid";
 import {
   DateField,
   EditButton,
-  List,
   ShowButton,
   useDataGrid
 } from "@refinedev/mui";
-import React from "react";
+import { List } from "pages/in-stock/components/List";
+import React, { useState } from "react";
+import { FarmerCreate } from "./create";
+
 
 export const FarmerList = () => {
   const { dataGridProps } = useDataGrid();
+  const [open, setOpen] = useState<boolean>(false)
+  const onClose = () => {
+    setOpen(false);
+  }
 
   const columns = React.useMemo<GridColumns<any>>(
     () => [
@@ -59,7 +66,15 @@ export const FarmerList = () => {
 
 
   return (
-    <List>
+    <List open={open} setOpen={setOpen}>
+      <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
+        <DialogTitle>
+          Create Farmer
+        </DialogTitle>
+        <DialogContent>
+          <FarmerCreate onClose={onClose} />
+        </DialogContent>
+      </Dialog>
       <DataGrid {...dataGridProps} columns={columns} autoHeight />
     </List>
   );

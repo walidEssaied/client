@@ -1,10 +1,11 @@
 import { Box, FormControl, FormLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Create } from "@refinedev/mui";
 import { useForm } from "@refinedev/react-hook-form";
+import { FC } from "react";
 import { useQuery } from "react-query";
 import { getFarmers } from "services/farmer";
 
-export const ProduitCreate = () => {
+export const ProduitCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
   const {
     saveButtonProps,
     refineCore: { formLoading },
