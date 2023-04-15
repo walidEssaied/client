@@ -31,17 +31,17 @@ export const ClientList = () => {
         headerName: "Name",
         minWidth: 200,
       },
-      {
-        field: "phone",
-        headerName: "Phone",
-        type: "number",
-        minWidth: 200,
-      },
-      {
-        field: "address",
-        headerName: "Address",
-        minWidth: 200,
-      },
+      // {
+      //   field: "phone",
+      //   headerName: "Phone",
+      //   type: "number",
+      //   minWidth: 200,
+      // },
+      // {
+      //   field: "address",
+      //   headerName: "Address",
+      //   minWidth: 200,
+      // },
       {
         field: "createdAt",
         headerName: "Created At",
