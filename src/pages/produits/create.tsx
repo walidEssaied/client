@@ -1,4 +1,5 @@
 import { Box, FormControl, FormLabel, MenuItem, Select, TextField } from "@mui/material";
+import { useGetIdentity } from "@refinedev/core";
 import { Create } from "@refinedev/mui";
 import { useForm } from "@refinedev/react-hook-form";
 import { FC } from "react";
@@ -19,18 +20,20 @@ export const ProduitCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
     queryFn: getFarmers(),
     queryKey: "farmers",
     enabled: true,
-    refetchOnWindowFocus: false,
+    // refetchOnWindowFocus: false,
   })
 
   const formValues = watch();
   console.log({ formValues });
-  console.log({ data });
+  // console.log(data);
 
   const selectedFarmer: any = (!isError && !isLoading && data) && (data || []).filter((item: any) => item.id === formValues.farmer)[0]
   console.log({ selectedFarmer })
-  const products: [] = selectedFarmer !== undefined ? selectedFarmer?.attributes?.produits.data : []
+  const products: [] = selectedFarmer !== undefined ? selectedFarmer?.produits.data : []
   console.log({ products });
   console.log(data);
+  const { data: user } = useGetIdentity<{ name: string, avatar: any, id: any }>();
+  const userId = user && user.id;
 
   return (
     <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
@@ -39,6 +42,20 @@ export const ProduitCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
+        <FormControl sx={{ mt: -1, display: "none" }}>
+          <TextField
+            type="hidden"
+            {...register("user", {
+              required: "This field is required",
+            })}
+            error={!!(errors as any)?.user}
+            helperText={(errors as any)?.user?.message}
+            margin="normal"
+            value={userId}
+            InputLabelProps={{ shrink: true }}
+            name="user"
+          />
+        </FormControl>
         <TextField
           {...register("name", {
             required: "This field is required",
@@ -74,8 +91,8 @@ export const ProduitCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
             {isError && (
               <MenuItem value="">Error while getting farmers...</MenuItem>
             )}
-            {(data || []).map((item: any, index: number) => (
-              <MenuItem value={item.id} key={index}>{item.attributes.name}</MenuItem>
+            {((data && data.length > 0 && data) || []).map((item: any, index: number) => (
+              <MenuItem value={item.id} key={index}>{item.name}</MenuItem>
             ))}
           </Select>
         </FormControl>

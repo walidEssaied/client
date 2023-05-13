@@ -22,6 +22,7 @@ import {
   NumberField,
   Show
 } from "@refinedev/mui";
+import { ComponentToPrintClientContainer } from "pages/farmers/components/PrintClientFacture";
 
 export const OutStockShow = () => {
   const { queryResult } = useShow(
@@ -34,7 +35,7 @@ export const OutStockShow = () => {
   const { data, isLoading } = queryResult;
 
   const record = data?.data;
-  console.log({ record });
+  console.log({ data });
 
   return (
     <Show isLoading={isLoading}>
@@ -63,11 +64,11 @@ export const OutStockShow = () => {
           Client
         </Typography>
         <Typography variant="body1">
-          {record?.client.name}
+          {/* {record?.client.name} */}
         </Typography>
       </Stack>
       <Stack mt={2} spacing={2}>
-      <Typography variant="body1" fontWeight="bold">
+        <Typography variant="body1" fontWeight="bold">
           Farmer
         </Typography>
         <Typography variant="body1">
@@ -77,29 +78,21 @@ export const OutStockShow = () => {
           Product
         </Typography>
         <Typography variant="body1">
-          {record?.produit.name}
+          {record?.product_name}
         </Typography>
-        {/* {record && record!.details.map((item: any) => (
-          <Stack p={2} direction="row" spacing={2} border={1} bgcolor="white">
-            <Typography>
-              <b>Product</b>
-              {" "} {item.product}
-            </Typography>
-            <Typography>
-              <b>Quantity</b>
-              {" "} {item.quantityVendu}
-            </Typography>
-            <Typography>
-              <b>Farmer</b>
-              {" "} {item.farmer}
-            </Typography>
-            <Typography>
-              <b>Prix</b>
-              {" "} {item.prix}
-            </Typography>
-          </Stack>
-        ))} */}
+        <Typography variant="body1" fontWeight="bold">
+          Client
+        </Typography>
+        <Typography variant="body1">
+          {record?.client}
+        </Typography>
       </Stack>
+      {record && (
+        <ComponentToPrintClientContainer
+          label="Facture"
+          out={record}
+        />
+      )}
     </Show>
   );
 };

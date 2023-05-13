@@ -1,4 +1,5 @@
-import { Box, TextField } from "@mui/material";
+import { Box, FormControl, TextField } from "@mui/material";
+import { useGetIdentity } from "@refinedev/core";
 import { Create } from "@refinedev/mui";
 import { useForm } from "@refinedev/react-hook-form";
 import { FC } from "react";
@@ -12,6 +13,11 @@ export const FarmerCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
     formState: { errors },
   } = useForm();
 
+  const { data: user } = useGetIdentity<{ name: string, avatar: any, id: any }>();
+  const userId = user && user.id;
+
+
+
   return (
     <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>
       <Box
@@ -19,6 +25,20 @@ export const FarmerCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
         sx={{ display: "flex", flexDirection: "column" }}
         autoComplete="off"
       >
+        <FormControl sx={{ mt: -1, display: "none" }}>
+          <TextField
+            type="hidden"
+            {...register("user", {
+              required: "This field is required",
+            })}
+            error={!!(errors as any)?.user}
+            helperText={(errors as any)?.user?.message}
+            margin="normal"
+            value={userId}
+            InputLabelProps={{ shrink: true }}
+            name="user"
+          />
+        </FormControl>
         <TextField
           {...register("name", {
             required: "This field is required",
