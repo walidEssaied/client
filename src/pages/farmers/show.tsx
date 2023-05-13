@@ -22,7 +22,6 @@ import {
 } from "@refinedev/mui";
 import { useState } from "react";
 import { useMutation, useQueryClient } from "react-query";
-import { useNavigate } from "react-router-dom";
 import { updateOut } from "services/out";
 import { ComponentToPrintContainer } from "./components/Print";
 import { ComponentToPrintClientContainer } from "./components/PrintClientFacture";
@@ -41,11 +40,10 @@ export const FarmerShow = () => {
 
  const record = data?.data;
 
- const navigate = useNavigate();
 
  const products = record ? record.produits : [];
  const filtredOuts = record ? record.outs.filter((item: any) => item.is_archive !== true).filter((item: any) => item.tag.includes(product)) : [];
- const archivedOuts = record ? record.outs.filter((item: any) => item.is_archive === false) : [];
+ const archivedOuts = record ? record.outs.filter((item: any) => item.is_archive === true) : [];
 
 
 
@@ -55,13 +53,6 @@ export const FarmerShow = () => {
   onSuccess: () => {
    console.log("Add out to archive");
    queryResult.refetch();
-   if (queryResult.isSuccess) {
-    // sleep(500);
-    // setTimeout(() => {
-    //  navigate(0)
-    // }, 1000);
-   }
-
   }
  })
 
