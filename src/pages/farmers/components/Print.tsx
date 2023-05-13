@@ -144,12 +144,6 @@ export const ComponentToPrint: FC<{ componentRef?: React.MutableRefObject<null>,
   var totalContainers = (outs || []).reduce(function (acc: any, obj: any) { return acc + obj.containers; }, 0);
   var totalPoids = (outs || []).reduce(function (acc: any, obj: any) { return acc + obj.poids; }, 0);
   var totalPrix = (outs || []).reduce(function (acc: any, obj: any) { return acc + obj.total; }, 0);
-  // var totalPoids = outs.reduce(function (acc: any, obj: any) { return acc + obj.poids; }, 0);
-  // const p = outs.length > 0 ? {
-  //  poids: totalPoids,
-  //  containers: totalContainers,
-  // } : null;
-  // console.log({ p });
 
   console.log({
     totalPoids,
@@ -157,7 +151,7 @@ export const ComponentToPrint: FC<{ componentRef?: React.MutableRefObject<null>,
   });
 
   return (
-    <Box p={4} ref={componentRef} mt={0} sx={{ backgroundColor: "#1581153d", height: "2500px" }}>
+    <Box p={4} ref={componentRef} mt={0}>
       <Box>
         <Stack direction="row" alignItems="start">
           <FactureContent

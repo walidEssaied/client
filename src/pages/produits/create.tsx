@@ -29,8 +29,6 @@ export const ProduitCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
 
   const selectedFarmer: any = (!isError && !isLoading && data) && (data || []).filter((item: any) => item.id === formValues.farmer)[0]
   console.log({ selectedFarmer })
-  const products: [] = selectedFarmer !== undefined ? selectedFarmer?.produits.data : []
-  console.log({ products });
   console.log(data);
   const { data: user } = useGetIdentity<{ name: string, avatar: any, id: any }>();
   const userId = user && user.id;
