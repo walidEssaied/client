@@ -89,10 +89,10 @@ const FactureContent: FC<{
                       {item.product_name ?? "product name"}
                     </TableCell>
                     <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 10, p: 1 }}>
-                      {item.poids ?? "poids"}
+                      {item.containers ?? "containers"}
                     </TableCell>
                     <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 10, p: 1 }}>
-                      {item.containers ?? "poids"}
+                      {item.poids ?? "poids"}
                     </TableCell>
                     <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 10, p: 1 }}>
                       {item.prix ?? "prix"}
