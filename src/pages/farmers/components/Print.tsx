@@ -45,22 +45,22 @@ const FactureContent: FC<{
           <Table sx={{ width: "auto" }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 150, fontSize: 10, p: 1 }}>Agent's name</TableCell>
-                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 70, fontSize: 10, p: 1 }}>Farmer</TableCell>
-                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 100, fontSize: 10, p: 1 }}>Date</TableCell>
+                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 150, fontSize: 14, p: 1 }}>Agent's name</TableCell>
+                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 70, fontSize: 14, p: 1 }}>Farmer</TableCell>
+                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 100, fontSize: 14, p: 1 }}>Date</TableCell>
               </TableRow>
             </TableHead>
             <TableBody sx={{ border: 0.5, borderColor: "green" }}>
               <TableRow
                 sx={{ '&:last-child td, &:last-child th': { border: "solid 1px green" } }}
               >
-                <TableCell align="left" sx={{ fontSize: 10, p: 1 }}>
+                <TableCell align="left" width={150} sx={{ fontSize: 14, p: 1 }}>
                   {userName ? userName : "-"}
                 </TableCell>
-                <TableCell align="left" sx={{ fontSize: 10, p: 1 }}>
+                <TableCell align="left" width={85} sx={{ fontSize: 14, p: 1 }}>
                   {farmer ? farmer.name : "Farmer"}
                 </TableCell>
-                <TableCell align="left" width={100} sx={{ fontSize: 8, p: 1 }}>
+                <TableCell align="left" width={200} sx={{ fontSize: 12, p: 1 }}>
                   {new_date ? new_date : "-"}
                 </TableCell>
               </TableRow>
@@ -72,11 +72,11 @@ const FactureContent: FC<{
           <Table sx={{ width: "auto" }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 150, fontSize: 10, p: 1 }}>Produit</TableCell>
-                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 70, fontSize: 10, p: 1 }}>Containers</TableCell>
-                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 70, fontSize: 10, p: 1 }}>Poids</TableCell>
-                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 70, fontSize: 10, p: 1 }}>Prix</TableCell>
-                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 100, fontSize: 10, p: 1 }}>Total</TableCell>
+                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 150, fontSize: 14, p: 1 }}>Produit</TableCell>
+                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 70, fontSize: 14, p: 1 }}>Containers</TableCell>
+                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 70, fontSize: 14, p: 1 }}>Poids</TableCell>
+                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 70, fontSize: 14, p: 1 }}>Prix</TableCell>
+                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 100, fontSize: 14, p: 1 }}>Total</TableCell>
               </TableRow>
             </TableHead>
             <TableBody sx={{ border: 0.5, borderColor: "greeb" }}>
@@ -85,19 +85,19 @@ const FactureContent: FC<{
                   <TableRow
                     key={index}
                   >
-                    <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 10, p: 1 }}>
+                    <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 14, p: 1 }}>
                       {item.product_name ?? "product name"}
                     </TableCell>
-                    <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 10, p: 1 }}>
+                    <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 14, p: 1 }}>
                       {item.containers ?? "containers"}
                     </TableCell>
-                    <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 10, p: 1 }}>
+                    <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 14, p: 1 }}>
                       {item.poids ?? "poids"}
                     </TableCell>
-                    <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 10, p: 1 }}>
+                    <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 14, p: 1 }}>
                       {item.prix ?? "prix"}
                     </TableCell>
-                    <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 10, p: 1 }}>
+                    <TableCell align="left" sx={{ border: 0.5, borderColor: "green", fontSize: 14, p: 1 }}>
                       {item.total ?? "total"}
                     </TableCell>
                   </TableRow>
@@ -112,18 +112,18 @@ const FactureContent: FC<{
           <Table sx={{ width: "auto" }} aria-label="simple table">
             <TableHead>
               <TableRow>
-                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 150, fontSize: 10, p: 1 }}>
+                <TableCell align="left" sx={{ fontWeight: 700, color: "green", border: 0.5, borderTopRightRadius: 8, width: 150, fontSize: 14, p: 1 }}>
                   Total
                 </TableCell>
-                <TableCell align="left" sx={{ color: "green", border: 0.5, borderTopRightRadius: 8, width: 70, fontSize: 10, p: 1 }}>
-                  <Typography color="gray" fontSize={10}>{totalContainers ?? "containers"}</Typography>
+                <TableCell align="left" sx={{ color: "green", border: 0.5, borderTopRightRadius: 8, width: 85, fontSize: 14, p: 1 }}>
+                  <Typography color="gray" fontSize={14}>{totalContainers ?? "containers"}</Typography>
                 </TableCell>
-                <TableCell align="left" sx={{ color: "green", border: 0.5, borderTopRightRadius: 8, width: 70, fontSize: 10, p: 1 }}>
-                  <Typography color="gray" fontSize={10}>{totalPoids ?? "poids"}</Typography>
+                <TableCell align="left" sx={{ color: "green", border: 0.5, borderTopRightRadius: 8, width: 70, fontSize: 14, p: 1 }}>
+                  <Typography color="gray" fontSize={14}>{totalPoids ?? "poids"}</Typography>
                 </TableCell>
                 <TableCell align="left" sx={{ width: 70 }}></TableCell>
-                <TableCell align="left" sx={{ color: "green", border: 0.5, borderTopRightRadius: 8, width: 100, fontSize: 10, p: 1 }}>
-                  <Typography color="gray" fontSize={10}>
+                <TableCell align="left" sx={{ color: "green", border: 0.5, borderTopRightRadius: 8, width: 100, fontSize: 14, p: 1 }}>
+                  <Typography color="gray" fontSize={14}>
                     {totalPrix ?? "prix"}
                   </Typography>
                 </TableCell>

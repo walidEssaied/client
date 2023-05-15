@@ -246,7 +246,7 @@ export const FarmerShow = () => {
          </Typography>
          <Typography>
           <b>
-           Containers: {" "}
+           Name: {" "}
           </b>
           {record ? record.name : "No name"}
          </Typography>
