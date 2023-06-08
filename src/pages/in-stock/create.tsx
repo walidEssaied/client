@@ -27,8 +27,6 @@ export const InStockCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
  })
 
  const formValues = watch();
- console.log({ formValues });
- console.log({ data });
 
  const selectedFarmer: any = (!isError && !isLoading && data) && (data || []).filter((item: any) => item.id === formValues.farmer)[0]
  const products: [] = selectedFarmer !== undefined ? selectedFarmer?.produits : []
@@ -53,8 +51,6 @@ export const InStockCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
    setValue("produit", product.id);
   }
  }, [product])
-
- console.log({ product });
 
  return (
   <Create isLoading={formLoading} saveButtonProps={saveButtonProps}>

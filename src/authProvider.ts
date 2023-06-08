@@ -1,7 +1,7 @@
 import { AuthBindings } from "@refinedev/core";
 import { AuthHelper } from "@refinedev/strapi-v4";
 
-import { TOKEN_KEY, API_URL } from "./constants";
+import { API_URL, TOKEN_KEY } from "./constants";
 
 import axios from "axios";
 
@@ -65,13 +65,14 @@ export const authProvider: AuthBindings = {
       return null;
     }
 
-    const { data, status } = await strapiAuthHelper.me(token);
+    const { data, status }: any = await strapiAuthHelper.me(token);
     if (status === 200) {
-      const { id, username, email } = data;
+      const { id, username, email, alert_payment } = data;
       return {
         id,
         name: username,
         email,
+        alert_payment,
       };
     }
 

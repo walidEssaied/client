@@ -21,7 +21,7 @@ import {
  Show
 } from "@refinedev/mui";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "react-query";
+import { useMutation } from "react-query";
 import { updateOut } from "services/out";
 import { ComponentToPrintContainer } from "./components/Print";
 import { ComponentToPrintClientContainer } from "./components/PrintClientFacture";
@@ -47,11 +47,8 @@ export const FarmerShow = () => {
 
 
 
- const queryClient = useQueryClient();
- console.log({ queryClient });
  const mutation = useMutation(updateOut, {
   onSuccess: () => {
-   console.log("Add out to archive");
    queryResult.refetch();
   }
  })
@@ -128,7 +125,6 @@ export const FarmerShow = () => {
        </Typography>
       )}
       <Stack direction="row" alignItems="end" spacing={2}>
-       {/* <Button onClick={() => console.log({ outs: record!.outs })}>Print All</Button> */}
        <ComponentToPrintContainer
         farmer={record ? record : null}
         outs={filtredOuts}
@@ -176,7 +172,7 @@ export const FarmerShow = () => {
          label="Facture"
          out={item}
         />
-        <Button startIcon={<Archive />} sx={{ color: "#471fa5" }} onClick={() => { console.log({ ...item, is_archive: true }); mutation.mutate({ ...item, is_archive: true }) }}>Archive</Button>
+        <Button startIcon={<Archive />} sx={{ color: "#471fa5" }} onClick={() => { mutation.mutate({ ...item, is_archive: true }) }}>Archive</Button>
        </Stack>
       </Stack>
      ))}

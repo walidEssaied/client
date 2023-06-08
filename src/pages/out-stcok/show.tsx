@@ -35,7 +35,6 @@ export const OutStockShow = () => {
   const { data, isLoading } = queryResult;
 
   const record = data?.data;
-  console.log({ data });
 
   return (
     <Show isLoading={isLoading}>

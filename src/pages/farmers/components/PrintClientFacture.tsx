@@ -123,11 +123,6 @@ export const ComponentToPrint: FC<{ componentRef?: React.MutableRefObject<null>,
   var totalPoids = out ? out.poids : "poids";
   var totalPrix = out ? out.total : "total";
 
-  console.log({
-    totalPoids,
-    totalPrix
-  });
-
   return (
     <Box p={4} ref={componentRef} mt={0}>
       <Box>
@@ -147,7 +142,6 @@ export const ComponentToPrint: FC<{ componentRef?: React.MutableRefObject<null>,
   )
 }
 export const ComponentToPrintClientContainer: FC<{ out?: any, label: string }> = ({ out, label }) => {
-  console.log({ out });
   const date = new Date();
   const new_date = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + "    |     " + date.getHours() + ":" + date.getMinutes();
 

@@ -48,19 +48,15 @@ export const OutStockCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
  const poids = formValues.poids;
  const produit = formValues.produitData;
 
- console.log({ formValues });
 
  useEffect(() => {
   const t = prix * poids;
   setValue("total", t)
-  console.log({ produit });
   if (produit) {
    setValue("produit", produit.id);
    setValue("product_name", produit.name);
    setValue("product_id", produit.id);
    setValue("tag", produit.tag);
-   console.log(produit.id)
-   console.log(produit.name)
   }
  }, [prix, poids, produit])
 
@@ -77,7 +73,6 @@ export const OutStockCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
        required: "This field is required",
        onChange: (e) => {
         const t: number = Number(formValues.poids) * Number(formValues.client);
-        console.log({ t });
         setValue("total", t)
        }
       })}
@@ -182,7 +177,6 @@ export const OutStockCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
        valueAsNumber: true,
        onChange: (e) => {
         const t: number = Number(formValues.poids) * Number(formValues.prix);
-        console.log({ t });
         setValue("total", t)
        }
       })}

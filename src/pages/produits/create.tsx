@@ -11,9 +11,7 @@ export const ProduitCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
     saveButtonProps,
     refineCore: { formLoading },
     register,
-    control,
     formState: { errors },
-    watch,
   } = useForm();
 
   const { data, isLoading, isError } = useQuery({
@@ -23,13 +21,6 @@ export const ProduitCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
     // refetchOnWindowFocus: false,
   })
 
-  const formValues = watch();
-  console.log({ formValues });
-  // console.log(data);
-
-  const selectedFarmer: any = (!isError && !isLoading && data) && (data || []).filter((item: any) => item.id === formValues.farmer)[0]
-  console.log({ selectedFarmer })
-  console.log(data);
   const { data: user } = useGetIdentity<{ name: string, avatar: any, id: any }>();
   const userId = user && user.id;
 

@@ -145,11 +145,6 @@ export const ComponentToPrint: FC<{ componentRef?: React.MutableRefObject<null>,
   var totalPoids = (outs || []).reduce(function (acc: any, obj: any) { return acc + obj.poids; }, 0);
   var totalPrix = (outs || []).reduce(function (acc: any, obj: any) { return acc + obj.total; }, 0);
 
-  console.log({
-    totalPoids,
-    totalPrix
-  });
-
   return (
     <Box p={4} ref={componentRef} mt={0}>
       <Box>
@@ -169,9 +164,7 @@ export const ComponentToPrint: FC<{ componentRef?: React.MutableRefObject<null>,
   )
 }
 export const ComponentToPrintContainer: FC<{ outs: any, farmer: any, label: string }> = ({ outs, farmer, label }) => {
-  console.log({ outs: outs });
   const date = new Date();
-  console.log({ farmer });
   const new_date = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + "    |     " + date.getHours() + ":" + date.getMinutes();
 
   const componentRef = useRef(null);

@@ -17,8 +17,6 @@ export const ProduitShow = () => {
 
  const record = data?.data;
 
- console.log({ record });
-
  return (
   <Show isLoading={isLoading}>
    <Stack gap={1}>

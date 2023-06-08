@@ -9,7 +9,6 @@ export const ClientCreate: FC<{ onClose?: () => void }> = ({ onClose }) => {
   saveButtonProps,
   refineCore: { formLoading },
   register,
-  control,
   formState: { errors },
  } = useForm();
 

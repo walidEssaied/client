@@ -17,26 +17,18 @@
 
 
 
-import { Autocomplete, Box, TextField } from "@mui/material";
-import { Edit, useAutocomplete } from "@refinedev/mui";
+import { Box, TextField } from "@mui/material";
+import { Edit } from "@refinedev/mui";
 import { useForm } from "@refinedev/react-hook-form";
-import { Controller } from "react-hook-form";
 
 export const ProduitEdit = () => {
  const {
   saveButtonProps,
-  refineCore: { queryResult },
   register,
-  control,
   formState: { errors },
  } = useForm();
 
- const produitsData = queryResult?.data?.data;
 
- const { autocompleteProps: outAutocompleteProps } = useAutocomplete({
-  resource: "outs",
-  defaultValue: produitsData?.out,
- });
 
  return (
   <Edit saveButtonProps={saveButtonProps}>
