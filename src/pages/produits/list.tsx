@@ -1,23 +1,18 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { DataGrid, GridColumns } from "@mui/x-data-grid";
-import {
-  DateField,
-  EditButton,
-  ShowButton,
-  useDataGrid
-} from "@refinedev/mui";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DateField, EditButton, ShowButton, useDataGrid } from "@refinedev/mui";
 import { List } from "pages/in-stock/components/List";
 import React, { useState } from "react";
 import { ProduitCreate } from "./create";
 
 export const ProduitList = () => {
   const { dataGridProps } = useDataGrid();
-  const [open, setOpen] = useState<boolean>(false)
+  const [open, setOpen] = useState<boolean>(false);
   const onClose = () => {
     setOpen(false);
-  }
+  };
 
-  const columns = React.useMemo<GridColumns<any>>(
+  const columns = React.useMemo<GridColDef<any>[]>(
     () => [
       {
         field: "id",
@@ -59,15 +54,13 @@ export const ProduitList = () => {
         minWidth: 80,
       },
     ],
-    [],
+    []
   );
 
   return (
     <List open={open} setOpen={setOpen}>
       <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-        <DialogTitle>
-          Create Farmer
-        </DialogTitle>
+        <DialogTitle>Create Farmer</DialogTitle>
         <DialogContent>
           <ProduitCreate onClose={onClose} />
         </DialogContent>

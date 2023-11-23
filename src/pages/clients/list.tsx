@@ -1,24 +1,19 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { DataGrid, GridColumns } from "@mui/x-data-grid";
-import {
-  DateField,
-  EditButton,
-  ShowButton,
-  useDataGrid
-} from "@refinedev/mui";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DateField, EditButton, ShowButton, useDataGrid } from "@refinedev/mui";
+import { commonFilters } from "contexts/commonFilters";
 import { List } from "pages/in-stock/components/List";
 import React, { useState } from "react";
 import { ClientCreate } from "./create";
 
 export const ClientList = () => {
-  const { dataGridProps } = useDataGrid();
-  const [open, setOpen] = useState<boolean>(false)
+  const { dataGridProps } = useDataGrid(commonFilters(""));
+  const [open, setOpen] = useState<boolean>(false);
   const onClose = () => {
     setOpen(false);
-  }
+  };
 
-
-  const columns = React.useMemo<GridColumns<any>>(
+  const columns = React.useMemo<GridColDef<any>[]>(
     () => [
       {
         field: "id",
@@ -31,17 +26,6 @@ export const ClientList = () => {
         headerName: "Name",
         minWidth: 200,
       },
-      // {
-      //   field: "phone",
-      //   headerName: "Phone",
-      //   type: "number",
-      //   minWidth: 200,
-      // },
-      // {
-      //   field: "address",
-      //   headerName: "Address",
-      //   minWidth: 200,
-      // },
       {
         field: "createdAt",
         headerName: "Created At",
@@ -66,15 +50,13 @@ export const ClientList = () => {
         minWidth: 80,
       },
     ],
-    [],
+    []
   );
 
   return (
     <List open={open} setOpen={setOpen}>
       <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-        <DialogTitle>
-          Create Client
-        </DialogTitle>
+        <DialogTitle>Create Client</DialogTitle>
         <DialogContent>
           <ClientCreate onClose={onClose} />
         </DialogContent>

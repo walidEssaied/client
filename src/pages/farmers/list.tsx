@@ -1,33 +1,21 @@
 import { Dialog, DialogContent, DialogTitle } from "@mui/material";
-import { DataGrid, GridColumns } from "@mui/x-data-grid";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useGetIdentity } from "@refinedev/core";
-import {
-  DateField,
-  EditButton,
-  ShowButton,
-  useDataGrid
-} from "@refinedev/mui";
+import { DateField, EditButton, ShowButton, useDataGrid } from "@refinedev/mui";
 import { PaymentAlert } from "components/alerts/paymentAlert";
 import { List } from "pages/in-stock/components/List";
 import React, { useState } from "react";
 import { FarmerCreate } from "./create";
 
-
 export const FarmerList = () => {
-  const { dataGridProps } = useDataGrid();
-  const [open, setOpen] = useState<boolean>(false)
+  const { dataGridProps, tableQueryResult } = useDataGrid();
+  const [open, setOpen] = useState<boolean>(false);
   const onClose = () => {
     setOpen(false);
-  }
+  };
 
-  const columns = React.useMemo<GridColumns<any>>(
+  const columns = React.useMemo<GridColDef<any>[]>(
     () => [
-      // {
-      //   field: "id",
-      //   headerName: "Id",
-      //   type: "number",
-      //   minWidth: 50,
-      // },
       {
         field: "name",
         headerName: "Name",
@@ -63,25 +51,20 @@ export const FarmerList = () => {
         minWidth: 80,
       },
     ],
-    [],
+    []
   );
-
+  const { data } = tableQueryResult;
 
   const { data: user } = useGetIdentity<{
-    alert_payment: boolean,
-    name: string,
+    alert_payment: boolean;
+    name: string;
   }>({});
-
 
   return (
     <List open={open} setOpen={setOpen}>
-      {user?.alert_payment && (
-        <PaymentAlert />
-      )}
+      {user?.alert_payment && <PaymentAlert />}
       <Dialog open={open} onClose={onClose} maxWidth="lg" fullWidth>
-        <DialogTitle>
-          Create Farmer
-        </DialogTitle>
+        <DialogTitle>Create Farmer</DialogTitle>
         <DialogContent>
           <FarmerCreate onClose={onClose} />
         </DialogContent>
